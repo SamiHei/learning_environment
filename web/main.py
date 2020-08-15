@@ -1,4 +1,14 @@
-from typing import Optional
+#! /usr/bin/python3
+
+# --------------------------------------------------------
+# Author: SamiHei
+# 
+# Run the program
+#    - Creates the FastAPI
+#    - Contains API endpoints
+# --------------------------------------------------------
+
+from typing import Optional # Optional arguments for functions
 
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -28,3 +38,4 @@ def read_item(item_id: int, q: Optional[str] = None):
 def update_item(item_id: int, item: Item):
     return {"item_name": item.name, "item_id": item_id}
 #==============================================================
+
