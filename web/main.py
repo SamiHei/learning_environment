@@ -8,6 +8,8 @@
 #    - Contains API endpoints
 # --------------------------------------------------------
 
+# DOCS: https://fastapi.tiangolo.com/
+
 from typing import Optional # Optional arguments for functions
 
 from fastapi import FastAPI

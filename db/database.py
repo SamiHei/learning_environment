@@ -41,7 +41,7 @@ class DatabaseModule:
         except sqlite3.Error as e:
             print(e)
         finally:
-            connection.close()
+            connection.close()2
 
 
     """
