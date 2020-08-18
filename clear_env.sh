@@ -1,5 +1,12 @@
 #! /bin/bash
-# Temporal script to clear running environment
+
+# --------------------------------------------------------
+# Author: SamiHei
+# 
+# Script to remove environment (database, ...)
+#
+# TODO: Maybe do "reset" script here? (Run remove and create_env.py)
+# --------------------------------------------------------
 
 DB=~/git/learning_environment/database.db
 

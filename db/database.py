@@ -10,7 +10,7 @@
 
 import sqlite3
 
-# TODO: Maybe test something with decorators??
+
 class DatabaseModule:
 
 
