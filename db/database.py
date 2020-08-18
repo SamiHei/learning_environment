@@ -44,23 +44,33 @@ class DatabaseModule:
             connection.close()
 
 
-    """
-    Creates table for user data structures
+    '''
+    Decorator function for creating tables
 
-    connection : sqlite3.connect
-    """
-    def create_users_table(self, connection):
-        try:
-            c = connection.cursor()
-            c.execute('''
-                      CREATE TABLE users
-                      (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                       first_name TEXT,
-                       last_name TEXT, 
-                       email TEXT);''')
-            connection.commit()
-        except sqlite3.Error as e:
-            print(e)
-        finally:
-            c.close()
+    Wraps connection, commit and close to this function which is used in every table creation
+    '''
+    def create_table_decor(func):
+        def wrapper(self, connection):
+            try:
+                c = connection.cursor()
+                func(self, c)
+                connection.commit()
+            except sqlite3.Error as e:
+                print(e)
+            finally:
+                c.close()
+        return wrapper
+
+
+    '''
+    SQLite3 statement to create users table
+    '''
+    @create_table_decor
+    def create_users_table(self, c):
+        c.execute('''
+                  CREATE TABLE users
+                  (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                   first_name TEXT,
+                   last_name TEXT, 
+                   email TEXT);''')
 
