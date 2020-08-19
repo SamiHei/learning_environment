@@ -76,7 +76,7 @@ class DatabaseModule:
                   (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                    first_name TEXT,
                    last_name TEXT, 
-                   email TEXT);''')
+                   email TEXT UNIQUE);''')
 
 
     '''
@@ -84,7 +84,7 @@ class DatabaseModule:
 
     Wraps connection, commit and close to this function which is used in every insert
 
-    Arguments
+    Arguments:
         *args = Values to be given for the statement
     '''
     def set_data_decor(func):
@@ -106,8 +106,49 @@ class DatabaseModule:
     SQLite3 statement to INSERT user
     '''
     @set_data_decor
-    def insert_user(self, c, user):
+    def create_user(self, c, user):
         c.execute('''
                   INSERT INTO users (first_name, last_name, email)
                   VALUES(?, ?, ?);''', (user.get_first_name(), user.get_last_name(), user.get_email()))
+
+
+    '''
+    Decorator function for SELECT statements
+
+    Wraps connection and close to this function which is used in every insert
+
+    Arguments:
+        *args = Values to be given for the statement
+
+    Returns:
+        Data from the SELECT statement
+    '''
+    def get_data_decor(func):
+        def wrapper(self, *args):
+            try:
+                con = self.create_connection()
+                c = con.cursor()
+                data = func(self, c, *args)
+            except sqlite3.Error as e:
+                print(e)
+            finally:
+                c.close()
+                con.close()
+            return data
+        return wrapper
+
+
+    '''
+    SQLite3 statement to GET all users
+
+    Arguments:
+        c = sqlite3 connection cursor
+
+    Returns:
+        Data from the SELECT statement
+    '''
+    @get_data_decor
+    def get_users(self, c):
+        c.execute('SELECT * from users')
+        return c.fetchall()
 
