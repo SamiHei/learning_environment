@@ -33,7 +33,8 @@ class DatabaseModule:
     """
     Creates the tables for database if doesn't exist already 
 
-    connection : sqlite3.connect
+    Arguments:
+       connection = sqlite3.connect
     """
     def create_tables(self, connection):
         try:
@@ -48,6 +49,9 @@ class DatabaseModule:
     Decorator function for creating tables
 
     Wraps connection, commit and close to this function which is used in every table creation
+
+    Arguments:
+        connection = sqlite3 connection
     '''
     def create_table_decor(func):
         def wrapper(self, connection):
@@ -63,7 +67,7 @@ class DatabaseModule:
 
 
     '''
-    SQLite3 statement to create users table
+    SQLite3 statement to CREATE users table
     '''
     @create_table_decor
     def create_users_table(self, c):
@@ -73,4 +77,37 @@ class DatabaseModule:
                    first_name TEXT,
                    last_name TEXT, 
                    email TEXT);''')
+
+
+    '''
+    Decorator function for INSERT and UPDATE statements
+
+    Wraps connection, commit and close to this function which is used in every insert
+
+    Arguments
+        *args = Values to be given for the statement
+    '''
+    def set_data_decor(func):
+        def wrapper(self, *args):
+            try:
+                con = self.create_connection()
+                c = con.cursor()
+                func(self, c, *args)
+                con.commit()
+            except sqlite3.Error as e:
+                print(e)
+            finally:
+                c.close()
+                con.close()
+        return wrapper
+
+
+    '''
+    SQLite3 statement to INSERT user
+    '''
+    @set_data_decor
+    def insert_user(self, c, user):
+        c.execute('''
+                  INSERT INTO users (first_name, last_name, email)
+                  VALUES(?, ?, ?);''', (user.get_first_name(), user.get_last_name(), user.get_email()))
 

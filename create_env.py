@@ -29,6 +29,8 @@ def main():
             print("Database already exists!")
     except sqlite3.Error as e:
         print(e)
+    finally:
+        con.close()
 
     # Create and/or set environmental requirements
 
