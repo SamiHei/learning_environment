@@ -9,49 +9,42 @@
 #
 # TODO:
 #    - Config file for db name, host address etc?
-#    - Wrapper between endpoints and database code
+#    - Commenting for endpoints
 # --------------------------------------------------------
 
 # DOCS: https://fastapi.tiangolo.com/
 
 from typing import Optional # Optional arguments for functions
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-from db.database import DatabaseModule
+from services.users import Users
+from data_structures.user import User
 
 # Create the FastAPI app (title, description and version from conf file?)
 app = FastAPI(title="Simple learning environment", description="Environment for WEB API and test automation",
               version="0.0.1")
 
-# Database (Name from config file?)
-db = DatabaseModule("database.db")
+users = Users("database.db")
 
 
+'''
+Here some good commenting about this endpoint
+'''
 @app.get("/users")
 def read_users():
-    return db.get_users()
+    return users.get_all_users()
 
 
-#===== Examples for the usage of FastAPI from the FastAPI documentation =======================
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Optional[bool] = None
+'''
+Here some good commenting about this endpoint
+'''
+@app.post("/users")
+async def create_user(user: User):
+    if users.check_if_user_valid(user) is False:
+        raise HTTPException(status_code=400, detail="Invalid JSON body data")
+    else:
+        users.create_user(user)
+    return {"first_name": user.first_name, "last_name": user.last_name, "email": user.email}
 
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
-
-
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_name": item.name, "item_id": item_id}
-#=============================================================================================
