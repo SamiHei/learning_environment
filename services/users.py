@@ -9,6 +9,7 @@
 
 
 import json
+import re
 
 from data_structures.user import User
 from db.database import DatabaseModule
@@ -16,7 +17,7 @@ from db.database import DatabaseModule
 
 class Users:
 
-    # Database (Name from config file?)
+
     def __init__(self, db_name):
         self.db = DatabaseModule(db_name)
 
@@ -32,6 +33,27 @@ class Users:
         elif user.email is "":
             return False
         return True
+
+
+    '''
+    Return false if email is already used
+    '''
+    def check_if_email_unique(self, user):
+        users_data = self.db.get_users()
+        for user_data in users_data:
+            if user.email in user_data:
+                return False
+        return True
+
+
+    '''
+    Checks the email format using regex
+    '''
+    def check_if_email_valid(self, user):
+        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
+        if(re.search(regex, user.email)):
+            return True
+        return False
 
 
     '''

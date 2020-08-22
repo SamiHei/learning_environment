@@ -58,16 +58,18 @@ Request body:
       "last_name": "user"
       "email": "example.user@email.test"
     }
-
-TODO:
-   - Check that email is unique
-   - Better verification for user overall
-   - HTTP Error codes
 '''
 @app.post("/users", status_code=201)
 async def create_user(user: User):
     if users.check_if_user_valid(user) is False:
-        raise HTTPException(status_code=400, detail="Invalid JSON body")
+        raise HTTPException(status_code=400, detail="Invalid JSON body!")
+    
+    elif users.check_if_email_unique(user) is False:
+        raise HTTPException(status_code=406, detail="Not unique email!")
+    
+    elif users.check_if_email_valid(user) is False:
+        raise HTTPException(status_code=406, detail="Invalid email format!")
+    
     else:
         users.create_user(user)
     return user
