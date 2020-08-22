@@ -9,7 +9,6 @@
 #
 # TODO:
 #    - Endpoints for updating user and delete user
-#    - TODOs in comments
 #
 # DOCS:
 #    - https://fastapi.tiangolo.com/
@@ -51,6 +50,11 @@ Arguments:
 
 Returns:
     - user = Created user json body
+
+Raises:
+    - HTTPExceptions:
+       *400 = JSON body data is invalid
+       *406 = Email is not unique or the format is invalid
 
 Request body:
     {

@@ -23,7 +23,7 @@ class Users:
 
 
     '''
-    Stupid check to see if any of the fields are empty
+    Simple check to see if any of the fields are empty
     '''
     def check_if_user_valid(self, user):
         if user.first_name is "":
