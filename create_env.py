@@ -11,18 +11,17 @@
 import os
 import sqlite3
 
+from config import DB_NAME
 from db.database import DatabaseModule
 
 
-db_name = "database.db"
-db = DatabaseModule(db_name)
-
-
 def main():
-    
+
+    db = DatabaseModule(DB_NAME)
+
     # Create database if not existing already
     try:
-        if not (os.path.isfile(db_name)):
+        if not (os.path.isfile(DB_NAME)):
             con = db.create_connection()
             db.create_tables(con)
         else:

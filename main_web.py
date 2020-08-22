@@ -8,29 +8,35 @@
 #    - Contains API endpoints
 #
 # TODO:
-#    - Config file for db name, host address etc?
-#    - Commenting for endpoints
+#    - Endpoints for updating user and delete user
+#    - TODOs in comments
+#
+# DOCS:
+#    - https://fastapi.tiangolo.com/
 # --------------------------------------------------------
 
-# DOCS: https://fastapi.tiangolo.com/
 
-from typing import Optional # Optional arguments for functions
+# Configs
+from config import VERSION, DB_NAME, FAST_API_TITLE, FAST_API_DESCRIPTION
 
+# Python packages
+# from typing import Optional # Optional arguments for functions
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 
+# Local libs
 from services.users import Users
 from data_structures.user import User
 
-# Create the FastAPI app (title, description and version from conf file?)
-app = FastAPI(title="Simple learning environment", description="Environment for WEB API and test automation",
-              version="0.0.1")
 
-users = Users("database.db")
+# Create the FastAPI app
+app = FastAPI(title=FAST_API_TITLE, description=FAST_API_DESCRIPTION,
+              version=VERSION)
+
+users = Users(DB_NAME)
 
 
 '''
-Here some good commenting about this endpoint
+GET all users
 '''
 @app.get("/users")
 def read_users():
@@ -38,13 +44,31 @@ def read_users():
 
 
 '''
-Here some good commenting about this endpoint
+Create users with POST request
+
+Arguments:
+    - user = User data structure
+
+Returns:
+    - user = Created user json body
+
+Request body:
+    {
+      "first_name": "example"
+      "last_name": "user"
+      "email": "example.user@email.test"
+    }
+
+TODO:
+   - Check that email is unique
+   - Better verification for user overall
+   - HTTP Error codes
 '''
-@app.post("/users")
+@app.post("/users", status_code=201)
 async def create_user(user: User):
     if users.check_if_user_valid(user) is False:
-        raise HTTPException(status_code=400, detail="Invalid JSON body data")
+        raise HTTPException(status_code=400, detail="Invalid JSON body")
     else:
         users.create_user(user)
-    return {"first_name": user.first_name, "last_name": user.last_name, "email": user.email}
+    return user
 
