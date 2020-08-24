@@ -129,12 +129,12 @@ class DatabaseModule:
                 con = self.create_connection()
                 c = con.cursor()
                 data = func(self, c, *args)
+                return data
             except sqlite3.Error as e:
                 print(e)
             finally:
                 c.close()
                 con.close()
-            return data
         return wrapper
 
 
