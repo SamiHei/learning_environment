@@ -11,7 +11,7 @@ Resource          ../robot_libraries/common_lib.robot
 *** Variables ***
 ${USERS_GET_ENDPOINT}   http://127.0.0.1:8000/users
 
-${USERS_DATA}      [[1,"Test","User0","test.user0@email.lol"],[2,"Test","User1","test.user1@email.lol"],[3,"Test","User2","test.user2@email.lol"]]
+${USERS_DATA}      [[1,"Test","User0","test.user0@email.testing"],[2,"Test","User1","test.user1@email.testing"],[3,"Test","User2","test.user2@email.testing"]]
 
 
 *** Test Cases ***
