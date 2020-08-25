@@ -39,7 +39,7 @@ def create_users_to_database(amount):
     for x in range(int(amount)):
         print("Round {}".format(x))
         l_name = "User{}".format(x)
-        email = "test.user{}@email.lol".format(x)
+        email = "test.user{}@email.testing".format(x)
         new_user = User(first_name="Test", last_name=l_name, email=email)
         users.create_user(new_user)
 
