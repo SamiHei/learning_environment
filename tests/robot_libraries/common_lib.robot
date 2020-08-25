@@ -23,8 +23,8 @@ Build Database
 
 
 Create Multiple Users
-    [Arguments]         ${amount}
-    Create Users To Database    ${amount}
+    [Arguments]         ${amount_of_users}
+    Create Users To Database    ${amount_of_users}
 
 
 Delete Database

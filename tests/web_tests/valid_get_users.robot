@@ -1,21 +1,22 @@
 *** Settings ***
 Documentation   Test case for verifying GET endpoint for users
 
-Suite Setup     Build Database And Create Users      5
+Suite Setup     Build Database And Create Users      3
 Suite Teardown  Delete Database
 
-# Library         # Propably some request lib or own custom?
-Library           BuiltIn
 Library           ../python_libraries/web_requests.py
 Resource          ../robot_libraries/common_lib.robot
 
+
 *** Variables ***
-${TEST}                 Testing
 ${USERS_GET_ENDPOINT}   http://127.0.0.1:8000/users
 
+${USERS_DATA}      [[1,"Test","User0","test.user0@email.lol"],[2,"Test","User1","test.user1@email.lol"],[3,"Test","User2","test.user2@email.lol"]]
+
+
 *** Test Cases ***
-# TODO: Suite setup and teardown done now the actual test!
 Get And Verify All Users
-    # Log To Console      ${TEST}
     ${ANSWER} =         Get Request     ${USERS_GET_ENDPOINT}
-    Log to Console      ${ANSWER}
+    Should Be Equal As Strings          200                     ${ANSWER}[0]    
+    Should Be Equal As Strings          application/json        ${ANSWER}[1]
+    Should Be Equal As Strings          ${USERS_DATA}           ${ANSWER}[2]    
